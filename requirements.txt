@@ -7,3 +7,4 @@ passlib==1.7.4
 APScheduler
 pydantic-settings
 python-multipart
+python-dotenv

@@ -6,10 +6,22 @@ from app.Utils.authorization import authenticate_user, create_access_token
 from app.api.v1.jobs import router as jobs_router
 from app.Utils.database import get_database
 import uvicorn
+from app.Utils.scheduler import start_scheduler, stop_scheduler
 
 app = FastAPI()
 
 app.include_router(jobs_router, prefix="/jobs", tags=["jobs"])
+
+@app.on_event("startup")
+async def startup_event():
+    # Start the scheduler
+    start_scheduler()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    # Stop the scheduler gracefully
+    stop_scheduler()
+
 
 @app.post("/token")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db=Depends(get_database)):
