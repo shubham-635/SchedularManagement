@@ -4,3 +4,6 @@ pymongo[srv]==4.6.0
 motor==3.1.2
 python-jose==3.3.0
 passlib==1.7.4
+APScheduler
+pydantic-settings
+python-multipart

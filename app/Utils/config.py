@@ -1,4 +1,12 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
+from pydantic import BaseModel
+from datetime import datetime
+
+
+class Job(BaseModel):
+    name: str
+    interval: int  # Interval in minutes
+    next_run: datetime
 
 class Settings(BaseSettings):
     mongodb_uri: str = "mongodb://localhost:27017"

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from app.Utils.database import get_database
 from app.Utils.authorization import verify_token
 from bson import ObjectId
+from app.Utils.config import Job
 
 router = APIRouter(
     dependencies=[Depends(verify_token)]
@@ -21,6 +22,6 @@ async def get_job(job_id: str, db=Depends(get_database)):
         raise HTTPException(status_code=404, detail="Job not found")
 
 @router.post("/")
-async def create_job(job_data: dict, db=Depends(get_database)):
-    result = await db.get_collection('jobs').insert_one(job_data)
+async def create_job(job_data: Job, db=Depends(get_database)):
+    result = await db.get_collection('jobs').insert_one(job_data.dict())
     return {"job_id": str(result.inserted_id)}
