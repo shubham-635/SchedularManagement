@@ -1,7 +1,29 @@
 services:
-  scheduler:
+  schedular:
     build: .
+    container_name: schedular_app
+    restart: always
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://root:example@mongo:27017/
     ports:
       - "8000:8000"
-    env_file:
-      - .env
+    volumes:
+      - .:/app
+
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

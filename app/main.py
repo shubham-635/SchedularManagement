@@ -4,7 +4,7 @@ from datetime import timedelta
 from app.Utils.config import settings
 from app.Utils.authorization import authenticate_user, create_access_token
 from app.api.v1.jobs import router as jobs_router
-from app.Utils.database import get_database
+from app.Utils.database import get_database, check_and_create_db
 import uvicorn
 from app.Utils.scheduler import start_scheduler, stop_scheduler
 
@@ -12,10 +12,16 @@ app = FastAPI()
 
 app.include_router(jobs_router, prefix="/jobs", tags=["jobs"])
 
+
+# @app.on_event("startup")
+# async def startup_db_client():
+    # await check_and_create_db()
+
+
 @app.on_event("startup")
 async def startup_event():
-    # Start the scheduler
     start_scheduler()
+    await check_and_create_db()
 
 @app.on_event("shutdown")
 async def shutdown_event():

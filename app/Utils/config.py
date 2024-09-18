@@ -2,9 +2,10 @@ from pydantic_settings import BaseSettings
 from pydantic import BaseModel
 from datetime import datetime
 import os
+from passlib.context import CryptContext
 
 # Load environment variables from **.env** file
-if not os.get("APP_ENV"):
+if not os.getenv("APP_ENV"):
     from dotenv import load_dotenv
     load_dotenv(".env")
 
@@ -24,3 +25,9 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
